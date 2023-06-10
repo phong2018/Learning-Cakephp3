@@ -2,6 +2,7 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use Cake\Event\Event;
 
 /**
  * Users Controller
@@ -12,6 +13,13 @@ use App\Controller\AppController;
  */
 class UsersController extends AppController
 {
+
+    public function beforeFilter(Event $event) {
+        $this->Auth->allow([
+            'signup', 'forgotPassword'
+        ]);
+    }
+
     /**
      * Index method
      *
@@ -54,6 +62,71 @@ class UsersController extends AppController
                 $this->Flash->success(__('The user has been saved.'));
 
                 return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('The user could not be saved. Please, try again.'));
+        }
+        $this->set(compact('user'));
+    }
+
+    /**
+     * login method
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function login()
+    {
+        if ($this->Auth->user()) {
+            $this->Flash->warning(__('You already logged.'));
+            return $this->redirect(['action' => 'index']);
+        }
+
+        if ($this->request->is('post')) {
+            $user = $this->Auth->identify();
+            if ($user) {
+                $this->Auth->setUser($user);
+                $this->Flash->success(__('Login success.'));
+                return $this->redirect(['action' => 'index']);
+            }
+            $this->Flash->error(__('Login info not correct.'));
+        }
+    }
+
+    /**
+     * logout method
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function logout()
+    {
+        $this->Flash->success(__('Logout success.'));
+        return $this->redirect($this->Auth->logout());
+
+    }
+
+    /**
+     * forgotPassword method
+     *
+     * @return \Cake\Http\Response|null
+     */
+    public function forgotPassword()
+    {
+
+    }
+
+    /**
+     * signup method
+     *
+     * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
+     */
+    public function signup()
+    {
+        $user = $this->Users->newEntity();
+        if ($this->request->is('post')) {
+            $user = $this->Users->patchEntity($user, $this->request->getData());
+            if ($this->Users->save($user)) {
+                $this->Flash->success(__('The user has been saved.'));
+
+                return $this->redirect(['action' => 'login']);
             }
             $this->Flash->error(__('The user could not be saved. Please, try again.'));
         }
