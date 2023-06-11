@@ -14,6 +14,7 @@
  */
 namespace App\Controller;
 
+use App\Middleware\TrackingCookieMiddleware;
 use Cake\Controller\Controller;
 use Cake\Event\Event;
 
@@ -66,5 +67,11 @@ class AppController extends Controller
          * see https://book.cakephp.org/3/en/controllers/components/security.html
          */
         //$this->loadComponent('Security');
+    }
+
+    public function beforeRender(Event $event) {
+        if ($this->Auth) {
+            $this->set('auth', $this->Auth->user());
+        }
     }
 }
