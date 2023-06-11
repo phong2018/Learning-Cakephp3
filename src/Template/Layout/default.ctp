@@ -44,9 +44,14 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         <div class="top-bar-section">
             <ul class="right">
                 <li><a target="_blank" href="https://book.cakephp.org/3/">Documentation</a></li>
-                <li>
-                <?php echo $this->Html->link('Logout', ['controller' => 'Users', 'action' => 'logout']); ?>
-                </li>
+                <?php if ($auth) { ?>
+                    <li class="">
+                        <a href="" class=""> <?php echo $auth['email']; ?> </a>
+                    </li>
+                    <li>
+                    <?php echo $this->Html->link('Logout', ['controller' => 'Users', 'action' => 'logout']); ?>
+                    </li>
+                <?php } ?>
             </ul>
         </div>
     </nav>
