@@ -2,6 +2,8 @@
 namespace App\Controller;
 
 use App\Controller\AppController;
+use App\Service\Product\CreateProductService;
+use App\Validator\Product\CreateProductValidator;
 
 /**
  * Products Controller
@@ -12,6 +14,11 @@ use App\Controller\AppController;
  */
 class ProductsController extends AppController
 {
+    public $paginate = [
+        'limit' => 5, // Number of products per page
+        'contain' => ['Users'] // Eager load the associated User model
+    ];
+
     /**
      * Index method
      *
@@ -57,18 +64,21 @@ class ProductsController extends AppController
      *
      * @return \Cake\Http\Response|null Redirects on successful add, renders view otherwise.
      */
+
     public function add()
     {
-        $product = $this->Products->newEntity();
         if ($this->request->is('post')) {
-            $product = $this->Products->patchEntity($product, $this->request->getData());
-            if ($this->Products->save($product)) {
-                $this->Flash->success(__('The product has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
+            $errors = (new CreateProductValidator())->validate($this->request->getData());
+            if (empty($errors)) {
+                $product = (new CreateProductService())->setHandler($this->Auth->user())->setFlash($this->Flash)->setData($this->request->getData())->handle();
+                if ($product) {
+                    return $this->redirect(['action' => 'index']);
+                }
+                return $this->redirect(['action' => 'add']);
             }
-            $this->Flash->error(__('The product could not be saved. Please, try again.'));
+            $this->set(compact('errors'));
         }
+        $product = $this->Products->newEntity();
         $this->set(compact('product'));
     }
 

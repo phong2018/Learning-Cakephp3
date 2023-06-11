@@ -17,6 +17,9 @@
         <?php
             echo $this->Form->control('name');
             echo $this->Form->control('description');
+            if (isset($errors)) {
+                var_dump($errors);
+            }
         ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>

@@ -30,6 +30,14 @@ class CreateProducts extends AbstractMigration
             'default' => null,
             'null' => false,
         ]);
+        $table->addColumn('user_id', 'integer', [
+            'null' => true,
+            'default' => null
+        ]);
+        $table->addForeignKey('user_id', 'users', 'id', [
+            'update' => 'CASCADE',
+            'delete' => 'CASCADE',
+        ]);
         $table->create();
     }
 }

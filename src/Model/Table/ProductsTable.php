@@ -35,8 +35,12 @@ class ProductsTable extends Table
         $this->setTable('products');
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
-
+        $this->setDisplayField('user_id');
         $this->addBehavior('Timestamp');
+
+        $this->belongsTo('Users')
+            ->setForeignKey('user_id')
+            ->setJoinType('INNER');
     }
 
     /**
@@ -61,6 +65,10 @@ class ProductsTable extends Table
             ->scalar('description')
             ->requirePresence('description', 'create')
             ->notEmptyString('description');
+
+        $validator
+            ->integer('user_id')
+            ->allowEmptyString('user_id', null, 'create');
 
         return $validator;
     }

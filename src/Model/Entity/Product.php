@@ -28,5 +28,6 @@ class Product extends Entity
         'description' => true,
         'created' => true,
         'modified' => true,
+        'user_id' => true,
     ];
 }
