@@ -4,20 +4,18 @@
  * @var \App\Model\Entity\User $user
  */
 ?>
-<nav class="large-3 medium-4 columns" id="actions-sidebar">
-    <ul class="side-nav">
-        <li class="heading"><?= __('Actions') ?></li>
-        <li><?= $this->Html->link(__('List Users'), ['action' => 'index']) ?></li>
-    </ul>
-</nav>
+
+<?php echo $this->element('side_menu'); ?>
+
 <div class="users form large-9 medium-8 columns content">
     <?= $this->Form->create() ?>
     <fieldset>
-        <legend><?= __('Add User') ?></legend>
+        <legend><?= __('Login') ?></legend>
         <?php
             echo $this->Form->control('email');
             echo $this->Form->control('password');
         ?>
+        <?php echo $this->Html->link('Forgot Password', ['controller' => 'Users', 'action' => 'forgotPassword']); ?>
     </fieldset>
     <?= $this->Form->button(__('Submit')) ?>
     <?= $this->Form->end() ?>
