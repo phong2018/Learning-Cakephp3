@@ -72,6 +72,10 @@ class ProductsController extends AppController
             if (empty($errors)) {
                 $product = (new CreateProductService())->setHandler($this->Auth->user())->setFlash($this->Flash)->setData($this->request->getData())->handle();
                 if ($product) {
+                    // call Demo job in Contrller
+                    // $this->loadModel('Queue.QueuedJobs');
+                    // $this->QueuedJobs->createJob('Demo', []);
+
                     return $this->redirect(['action' => 'index']);
                 }
                 return $this->redirect(['action' => 'add']);

@@ -4,6 +4,7 @@ namespace App\Service\Product;
 
 use App\CakePhpCore\BaseService;
 use Cake\Mailer\Email;
+use Cake\ORM\TableRegistry;
 
 class CreateProductService extends BaseService
 {
@@ -27,7 +28,13 @@ class CreateProductService extends BaseService
 
         if ($product) {
             $this->sendEmailCreateProduct($product);
+
             $this->flash->success(__('The product has been saved.'));
+
+            // call job Demo in Service
+            TableRegistry::getTableLocator()->get('Queue.QueuedJobs')->createJob('Demo',
+            []);
+
             return $product;
         }
 
