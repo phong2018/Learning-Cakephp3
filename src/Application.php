@@ -14,6 +14,7 @@
  */
 namespace App;
 
+use App\Middleware\DemoMiddleware;
 use Cake\Core\Configure;
 use Cake\Core\Exception\MissingPluginException;
 use Cake\Error\Middleware\ErrorHandlerMiddleware;
@@ -69,6 +70,9 @@ class Application extends BaseApplication
             ->add(new AssetMiddleware([
                 'cacheTime' => Configure::read('Asset.cacheTime'),
             ]))
+
+            // Add your simple middleware onto the queue
+            ->add(new DemoMiddleware())
 
             // Add routing middleware.
             // If you have a large number of routes connected, turning on routes
